@@ -118,8 +118,18 @@ namespace Task3
             Mitarbeiter x = (Mitarbeiter)test[0];
             Console.WriteLine(x.GetGehalt());
 
+            
             Kunden y = (Kunden)test[1];
             Console.WriteLine(y.Name);
+
+
+            Console.WriteLine("-----Loop Ergaenzung----");
+            //Loop over array of objects
+            foreach (var element in test)
+            {
+                Console.WriteLine(x.GetGehalt());
+                Console.WriteLine(y.Name);
+            }
 
         }
     }
