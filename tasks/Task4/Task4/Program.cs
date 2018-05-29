@@ -136,8 +136,9 @@ namespace Task4
                };
 
             Console.WriteLine("----------Serialization----------");
+            var settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto, Formatting = Formatting.Indented };
 
-            File.WriteAllText(@"C:\Users\Baris\oom\tasks\test.json", JsonConvert.SerializeObject(testx, Formatting.Indented));
+            File.WriteAllText(@"C:\Users\Baris\oom\tasks\test.json", JsonConvert.SerializeObject(testx, settings));
 
             Console.WriteLine(System.IO.File.ReadAllText(@"C:\Users\Baris\oom\tasks\test.json"));
 
@@ -148,15 +149,15 @@ namespace Task4
 
             string blabla=File.ReadAllText(@"C:\Users\Baris\oom\tasks\test.json");
 
-            Array uff = JsonConvert.DeserializeObject<Array>(blabla);
+            var uff = JsonConvert.DeserializeObject<Abteilung[]>(blabla, settings);
 
             Console.WriteLine(blabla);
 
             //Methode 2=> gibt mir einen "unexpected character" error
 
-            List<string> jaja = JsonConvert.DeserializeObject<List<string>>(blabla);
+            //List<string> jaja = JsonConvert.DeserializeObject<List<string>>(blabla);
 
-            Console.WriteLine(string.Join(", ", jaja.ToArray()));
+            //Console.WriteLine(string.Join(", ", jaja.ToArray()));
 
         }
     }

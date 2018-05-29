@@ -1,9 +1,11 @@
 [
   {
+    "$type": "Task4.Mitarbeiter, Task4",
     "Namee": "Peter",
     "Gehaltt": 1400.0
   },
   {
+    "$type": "Task4.Kunden, Task4",
     "Name": "Martha",
     "Alter": 55.0
   }
