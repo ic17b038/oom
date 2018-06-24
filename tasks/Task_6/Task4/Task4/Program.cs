@@ -8,10 +8,15 @@ using Newtonsoft.Json.Serialization;
 using System.IO;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using static System.Console;
+
 
 
 namespace Task4
 {
+    
     //Interface
     interface Abteilung
     {
@@ -92,8 +97,29 @@ namespace Task4
         public double Alter { get; }
     }
 
+   
+
     class Program
     {
+        public static Task<bool> task7func(int k, int j)
+        {
+            return Task.Run(() =>
+            {
+                if(k+j==10)
+                {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        public static async Task blubla(int j)
+        {
+                int k = 10;
+                if (await task7func(k,j)) WriteLine($"[P] prime number:{k}");
+            
+        }
+
         static void Main(string[] args)
         {
             //new object of class
@@ -165,17 +191,61 @@ namespace Task4
 
             Console.WriteLine("-----------Task6-Subject---------");
 
-            var sub = new Subject<Mitarbeiter>();
+            var sub = new Subject<Mitarbeiter>(); //Producer vom stream
 
-            sub.Subscribe(l => Console.WriteLine($"received value{x}"));
+            sub.Subscribe(l => Console.WriteLine($"received value: {l.Namee}")); //Empfanger vom Stream
             
             for(var i=0;i<5;i++)
             {
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                Thread.Sleep(250);
                 
-                sub.OnNext(new Mitarbeiter(1000,"pete"));
+                sub.OnNext(new Mitarbeiter(1000,"pete")); //Stream Fueterung
             }
 
+            var p = new Thread(() =>
+            {
+                int o = 4;
+                while (o != 0)
+                {
+                    Thread.Sleep(250);
+                    sub.OnNext(new Mitarbeiter(800, "Hans"));
+                    o--;
+                }
+            });
+            p.Start();
+
+
+            Console.WriteLine("-----------Task7 ab hier---------");
+
+            //starting tasks using Task.Run
+
+            var tasks = new List<Task<int>>();
+
+           
+                var task = Task.Run(() =>
+                  {
+                      //Task.Delay(800);
+                      Console.WriteLine($"[T] Test");
+                      return 5;
+                  });
+                
+                tasks.Add(task);
+
+
+            //continuewith
+            var tasks2 = new List<Task<int>>();
+            foreach (var taskx in tasks)
+            {
+                tasks2.Add(
+                    taskx.ContinueWith(r => { WriteLine($"[C] ergebni {r.Result}");return r.Result; })
+                    );
+            }
+
+            //await
+            var primetask = blubla(5);
+
+            
+           
         }
     }
 }
